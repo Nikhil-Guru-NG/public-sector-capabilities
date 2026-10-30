@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Public Sector Capabilities</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&display=swap">
+<style>
+/* Layout: field guide. Hero with a 3-step "how to use" strip, a department picker that answers "what do I bring up",
+   eight use-case rows (pitch, where it's used today, where else it can be used), and a detail sheet per use case. */
+:root{
+  --bg:#FFFFFF; --soft:#F6F8FB; --card:#FFFFFF; --line:#E4E9F0; --line2:#D3DBE6;
+  --ink:#0A1A33; --body:#3A4A60; --muted:#687891;
+  --accent:#1A73E8; --accent-ink:#FFFFFF; --accent-soft:#EAF2FE; --accent-text:#1557B8;
+  --pilot:#9A5B00; --pilot-soft:#FFF3DF; --scrim:rgba(10,26,51,.42);
+  --display:"Inter Tight","Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --text:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --r:18px; --r2:12px;
+  /* solution hues: tint / strong */
+  --h1:#EAF2FE; --H1:#1557B8; --h2:#E7F6EE; --H2:#0F6E45; --h3:#EEEFFE; --H3:#3F3AC2; --h4:#F3EDFE; --H4:#6A2BC9;
+  --h5:#FFF2E0; --H5:#9A5300; --h6:#E4F5F8; --H6:#0C6A82; --h7:#FDEEF3; --H7:#B0185A; --h8:#EEF1F5; --H8:#33445C;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A111D; --soft:#101A2A; --card:#0F1827; --line:#1F2C42; --line2:#2C3B55;
+  --ink:#EDF2FA; --body:#C1CBDA; --muted:#8C99AE;
+  --accent:#5B9BFF; --accent-ink:#06142B; --accent-soft:#132644; --accent-text:#9EC2FF;
+  --pilot:#F6BC6A; --pilot-soft:#332411; --scrim:rgba(0,0,0,.6);
+  --h1:#132644; --H1:#9EC2FF; --h2:#0F2A1F; --H2:#7FD9AC; --h3:#1B1D45; --H3:#AFAEFF; --h4:#241A40; --H4:#C9A8FF;
+  --h5:#33240F; --H5:#F6BC6A; --h6:#0E2A31; --H6:#7AD3E6; --h7:#3A1626; --H7:#F59BC0; --h8:#18212F; --H8:#B9C5D6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A111D; --soft:#101A2A; --card:#0F1827; --line:#1F2C42; --line2:#2C3B55;
+  --ink:#EDF2FA; --body:#C1CBDA; --muted:#8C99AE;
+  --accent:#5B9BFF; --accent-ink:#06142B; --accent-soft:#132644; --accent-text:#9EC2FF;
+  --pilot:#F6BC6A; --pilot-soft:#332411; --scrim:rgba(0,0,0,.6);
+  --h1:#132644; --H1:#9EC2FF; --h2:#0F2A1F; --H2:#7FD9AC; --h3:#1B1D45; --H3:#AFAEFF; --h4:#241A40; --H4:#C9A8FF;
+  --h5:#33240F; --H5:#F6BC6A; --h6:#0E2A31; --H6:#7AD3E6; --h7:#3A1626; --H7:#F59BC0; --h8:#18212F; --H8:#B9C5D6; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--body);font-family:var(--text);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3,h4{font-family:var(--display);color:var(--ink);margin:0;text-wrap:balance;letter-spacing:-.02em}
+p{margin:0}
+button{font:inherit}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:8px}
+.kicker{font-size:13px;font-weight:600;color:var(--accent-text);letter-spacing:.01em}
+section{padding-block:56px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:28px}
+.sechead{display:flex;flex-direction:column;gap:8px;max-width:700px}
+.sechead h2{font-size:clamp(26px,3.2vw,34px);font-weight:700;line-height:1.15}
+.sechead p{font-size:17px;color:var(--body)}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;color:var(--ink);font-size:16px;letter-spacing:-.01em}
+.brand span{color:var(--muted);font-weight:600}
+.event{font-size:13px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+
+/* hero */
+.hero{padding-block:36px 56px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:center}
+.hero h1{font-size:clamp(36px,5.4vw,58px);font-weight:800;line-height:1.02;margin-top:10px}
+.hero .lead{font-size:19px;line-height:1.55;margin-top:18px;max-width:34em}
+.how{background:var(--soft);border-radius:var(--r);padding:26px;display:flex;flex-direction:column}
+.how .t{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px}
+.how ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.how li{display:grid;grid-template-columns:36px 1fr;gap:14px;position:relative;padding-bottom:20px}
+.how li:last-child{padding-bottom:0}
+.how li:not(:last-child)::before{content:"";position:absolute;left:17px;top:36px;bottom:2px;width:2px;background:var(--line2)}
+.how .dot{width:36px;height:36px;border-radius:50%;background:var(--card);border:2px solid var(--accent);color:var(--accent-text);font-weight:700;display:grid;place-items:center;font-size:15px}
+.how b{display:block;color:var(--ink);font-size:16px;font-weight:600;line-height:1.3;padding-top:6px}
+.how small{display:block;color:var(--muted);font-size:14px;line-height:1.45;margin-top:2px}
+
+/* use cases */
+.uses{display:flex;flex-direction:column;gap:18px}
+.use{display:grid;grid-template-columns:270px minmax(0,1fr) minmax(0,1.25fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.use .tint{padding:22px;display:flex;flex-direction:column;gap:6px}
+.use .tag{font-size:12.5px;font-weight:600}
+.use .nm{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.015em;line-height:1.2;color:var(--ink)}
+.use .big{font-family:var(--display);font-weight:800;font-size:27px;white-space:nowrap;line-height:1.05;letter-spacing:-.03em;margin-top:14px;font-variant-numeric:tabular-nums}
+.use .unit{font-size:13.5px;line-height:1.35;color:var(--body)}
+.use .open{align-self:flex-start;border:none;cursor:pointer;background:var(--card);color:var(--ink);font-weight:600;font-size:13.5px;white-space:nowrap;border-radius:999px;padding:9px 15px;box-shadow:0 1px 0 var(--line)}
+.use .gap{flex:1;min-height:16px}
+.use .open:hover{color:var(--accent-text)}
+.use .pitch{padding:22px 24px;display:flex;flex-direction:column;gap:10px;border-right:1px solid var(--line)}
+.use .pitch p{font-size:15.5px;line-height:1.6;color:var(--ink)}
+.use .where{padding:22px 24px;display:flex;flex-direction:column;gap:18px;background:var(--soft)}
+.ul{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.dp{display:flex;flex-wrap:wrap;gap:7px}
+.dp span{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:13.5px;line-height:1.3;font-weight:500;border:1px solid var(--line2);background:var(--card);color:var(--ink)}
+.dp.now span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.dp.now span.comm{background:var(--card);border-color:var(--line2);color:var(--ink)}
+.dp.now span em{font-style:normal;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--pilot-soft);color:var(--pilot)}
+.dp.now span.comm em{background:var(--soft);color:var(--muted)}
+
+/* finder */
+.finder{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:start}
+.families{display:flex;flex-direction:column;gap:18px}
+.fam h3{font-size:14px;font-weight:600;font-family:var(--text);letter-spacing:0;color:var(--muted);margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;line-height:1.25;cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.answer{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 20px);background:var(--soft);border-radius:var(--r);padding:26px;display:flex;flex-direction:column;gap:22px;min-width:0}
+.answer .q{font-size:14px;color:var(--muted);font-weight:500}
+.answer h3{font-size:24px;font-weight:700;line-height:1.2;margin-top:4px}
+.answer .grp{display:flex;flex-direction:column;gap:10px}
+.answer .gl{font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.answer .gl i{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.answer .gl i.o{background:transparent;border:2px solid var(--muted)}
+.row{all:unset;cursor:pointer;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px}
+.row:hover{border-color:var(--accent)}
+.row:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+.row .sw{width:52px;height:40px;border-radius:9px;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:13px}
+.row .nm{color:var(--ink);font-weight:600;font-size:15px;line-height:1.3}
+.row .why{color:var(--muted);font-size:13.5px;line-height:1.35}
+.row .go{color:var(--muted);font-size:18px}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--pilot-soft);color:var(--pilot);margin-left:6px;vertical-align:1px}
+.badge.comm{background:var(--soft);color:var(--muted);border:1px solid var(--line2)}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.rule{border:1px solid var(--line);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:6px}
+.rule b{color:var(--ink);font-size:15.5px;line-height:1.3}
+.rule p{font-size:14px;line-height:1.45;color:var(--body)}
+.rule small{font-size:12.5px;color:var(--muted);margin-top:auto;padding-top:6px}
+footer{padding-block:28px 48px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+
+/* detail sheet */
+dialog{border:none;padding:0;margin:auto;width:min(980px, calc(100vw - 24px));max-height:calc(100dvh - 32px);border-radius:22px;background:var(--bg);color:var(--body);box-shadow:0 30px 80px -20px rgba(0,0,0,.45)}
+dialog::backdrop{background:var(--scrim)}
+.sheet{display:flex;flex-direction:column}
+.sh-top{padding:28px 32px 26px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}
+.sh-top .tag{font-size:13px;font-weight:600}
+.sh-top h2{font-size:clamp(28px,3.6vw,38px);font-weight:800;line-height:1.08;margin-top:6px}
+.sh-top p{font-size:17.5px;margin-top:10px;color:var(--ink);opacity:.82;max-width:40em}
+.x{border:none;background:var(--card);color:var(--ink);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;display:grid;place-items:center;box-shadow:0 1px 0 var(--line)}
+.sh-body{padding:28px 32px 32px;display:flex;flex-direction:column;gap:30px}
+.blk{display:flex;flex-direction:column;gap:14px}
+.blk h3{font-size:15px;font-weight:600;font-family:var(--text);letter-spacing:0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{border:1px solid var(--line);border-radius:var(--r2);padding:16px;display:flex;flex-direction:column;gap:6px}
+.stat .v{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.05;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .d{font-size:14px;line-height:1.4;color:var(--body)}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.step{display:flex;flex-direction:column;gap:10px;padding-right:18px;position:relative}
+.step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;position:relative;z-index:1}
+.step:not(:last-child)::after{content:"";position:absolute;top:16px;left:42px;right:8px;height:2px;background:var(--line2)}
+.step p{font-size:15.5px;line-height:1.45;color:var(--ink)}
+.quote{border-radius:var(--r2);padding:20px 22px;font-family:var(--display);font-size:clamp(18px,2.2vw,21px);line-height:1.4;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.quote small{display:block;font-family:var(--text);font-size:13px;font-weight:600;margin-bottom:6px;letter-spacing:0}
+.depts{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px}
+.dbox{border:1px solid var(--line);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:12px}
+.dbox h4{font-family:var(--text);font-size:14px;font-weight:600;letter-spacing:0;color:var(--ink);display:flex;align-items:center;gap:8px}
+.dbox h4 i{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.dbox h4 i.o{background:transparent;border:2px solid var(--muted)}
+.dl{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.dl li{display:flex;flex-direction:column;padding:10px 12px;border-radius:10px;background:var(--soft)}
+.dl li b{color:var(--ink);font-size:14.5px;font-weight:600;line-height:1.3}
+.dl li small{color:var(--muted);font-size:13px;line-height:1.35}
+.dl.fit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.dl.fit li{background:transparent;border:1px solid var(--line2)}
+.note{font-size:14px;color:var(--muted);line-height:1.5}
+details.src{border-top:1px solid var(--line);padding-top:18px}
+details.src summary{cursor:pointer;font-size:15px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px}
+details.src summary::-webkit-details-marker{display:none}
+details.src summary::before{content:"+";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);font-size:15px;color:var(--muted)}
+details.src[open] summary::before{content:"\2212"}
+.srcs{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.srcs li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 14px;padding:12px 14px;border-radius:10px;background:var(--soft);font-size:14px}
+.srcs .s{color:var(--ink);font-weight:600}
+.srcs .k{font-size:12.5px;color:var(--muted);font-weight:600}
+.srcs .f{grid-column:1/-1;color:var(--muted)}
+.srcs a{color:var(--accent-text);font-weight:600;text-underline-offset:3px}
+.sh-nav{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:18px 32px 24px}
+.sh-nav button{border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.sh-nav button:hover{border-color:var(--accent)}
+
+@media (max-width:1000px){
+  .use{grid-template-columns:minmax(0,1fr)}
+  .use .pitch{border-right:none;border-bottom:1px solid var(--line)}
+  .use .big{margin-top:6px}
+  .rules{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{grid-template-columns:minmax(0,1fr);gap:28px}
+  .finder{grid-template-columns:minmax(0,1fr)}
+  .answer{position:static}
+}
+@media (max-width:700px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .flow{grid-template-columns:minmax(0,1fr);gap:16px}
+  .step:not(:last-child)::after{display:none}
+  .depts{grid-template-columns:minmax(0,1fr)}
+  .dl.fit{grid-template-columns:minmax(0,1fr)}
+  .sh-top,.sh-body,.sh-nav{padding-left:20px;padding-right:20px}
+}
+@media (max-width:520px){.rules{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<style>[hidden]{display:none!important} body{margin:0} img{max-width:100%}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">Techolution <span>· Public Sector</span></div>
+    <div class="event">Amazon Web Services and Carahsoft Partner Day</div>
+  </div>
+
+  <div class="hero">
+    <div>
+      <div class="kicker">Talking points for partner reps</div>
+      <h1>Find the right AI story for any government department</h1>
+      <p class="lead">Eight repeatable AI solutions. For each one: the pitch, the numbers you can quote, where we use it today and the other state and city departments it applies to.</p>
+    </div>
+    <div class="how" aria-label="How to use this page">
+      <div class="t">How to use this page</div>
+      <ol>
+        <li><span class="dot">1</span><div><b>Pick their department</b><small>Choose where your contact works.</small></div></li>
+        <li><span class="dot">2</span><div><b>Read the pitch for that use case</b><small>Live work first, then strong fits.</small></div></li>
+        <li><span class="dot">3</span><div><b>Say the line, quote one number</b><small>Every number has its source attached.</small></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <section id="finder" aria-labelledby="finder-h">
+    <div class="sechead">
+      <div class="kicker">Step 1</div>
+      <h2 id="finder-h">Who are you talking to?</h2>
+      <p>Pick a department. The panel shows which use cases to lead with.</p>
+    </div>
+    <div class="finder">
+      <div class="families" id="families"></div>
+      <aside class="answer" id="answer" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section id="solutions" aria-labelledby="sol-h">
+    <div class="sechead">
+      <div class="kicker">Step 2</div>
+      <h2 id="sol-h">Eight use cases, and where each one can be used</h2>
+      <p>Each use case shows the pitch, where we use it today and the other departments it applies to. Open one for the full numbers, how it works and the sources.</p>
+    </div>
+    <div class="uses" id="uses"></div>
+  </section>
+
+  <section id="rules" aria-labelledby="rules-h">
+    <div class="sechead">
+      <div class="kicker">Step 3</div>
+      <h2 id="rules-h">Five things to keep in mind</h2>
+      <p>What the Partner Day prep calls agreed on.</p>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>Lead with efficiency</b><p>Government buyers weigh efficiency, productivity and security above return on investment.</p><small>Patrick, Oct 30</small></div>
+      <div class="rule"><b>Say business process automation</b><p>It's the term public sector teams already use and trust.</p><small>Patrick, Nick and Tim, Oct 30</small></div>
+      <div class="rule"><b>AI supports staff</b><p>Talk about helping the current team, never about cutting jobs.</p><small>Nick, Oct 30</small></div>
+      <div class="rule"><b>Name the department type</b><p>Say "a state department of transportation", never the agency's name.</p><small>Nick and Patrick, Oct 30</small></div>
+      <div class="rule"><b>Spell out acronyms</b><p>Say "Department of Social Services", never the letters. Explain it like they're new to it.</p><small>Nick, Oct 30</small></div>
+    </div>
+  </section>
+
+  <footer>Every number links to its source inside each use case. Commercial results are marked, and they show what the same work looks like in government.</footer>
+</div>
+
+<dialog id="sheet" aria-labelledby="sh-title"></dialog>
+
+<script>
+const C27="https://docs.google.com/document/d/1B4gcV5yKRtah7LYTqK_Dw6dKEG9xbnGo6aYzyHuA8xA/edit",
+      C29="https://docs.google.com/document/d/1zKTeMaPoxUpVs8Cv9hmZcSMlX7czr_Z6PfEa_tkmiYw/edit",
+      C30="https://docs.google.com/document/d/1rCitQpVhwWJWQrwlzIBYCKOw0Pwk8G8y0ZrY9WmPkhI/edit";
+
+const FAM=[
+ ["people","People and benefits"],["infra","Transportation, permits and infrastructure"],["front","Front door for residents"],
+ ["money","Finance, oversight and technology"],["law","Courts, law, records and education"],["defense","Defense"]];
+const D={
+ dhs:["State Department of Human Services","people"], dss:["City Department of Social Services","people"],
+ dol:["State Department of Labor","people"], doh:["State Department of Health","people"], va:["Department of Veterans Affairs","people"],
+ wcb:["Workers' Compensation Board","people"], hcd:["Department of Housing and Community Development","people"], pha:["Public Housing Authority","people"],
+ dot:["State Department of Transportation","infra"], dpw:["Department of Public Works","infra"], dob:["City Department of Buildings","infra"],
+ dep:["Department of Environmental Protection","infra"], parks:["State Division of Parks and Recreation","infra"], puc:["Public Utilities Commission","infra"],
+ fm:["Office of the State Fire Marshal","infra"], lic:["Department of Professional Licensing and Regulation","infra"], ag:["State Department of Agriculture","infra"],
+ dmv:["Department of Motor Vehicles","front"], c311:["City 311 Customer Service Center","front"], rev:["Department of Revenue","front"], tour:["State Office of Tourism","front"],
+ comp:["City Office of the Comptroller","money"], doit:["State Department of Information Technology","money"], ciso:["Office of the State Chief Information Security Officer","money"],
+ das:["Department of Administrative Services","money"], dgs:["Department of General Services","money"], dbm:["Department of Budget and Management","money"],
+ aud:["Office of the State Auditor","money"], oig:["Office of the Inspector General","money"], risk:["Office of Risk Management","money"],
+ aoc:["Administrative Office of the Courts","law"], oag:["Office of the Attorney General","law"], arch:["State Archives and Records Administration","law"],
+ lib:["State Library","law"], leg:["Office of Legislative Research","law"], edu:["State Department of Education","law"],
+ dod:["U.S. Department of Defense","defense"]
+};
+
+// work: [deptId|null, status, label, note]; status live | pilot | comm
+const S=[
+{id:"citizen-services",n:1,name:"Citizen Services AI",area:"Citizen services",tag:"Government",big:"145K",unit:"calls a day at one of our largest agencies",
+ one:"A phone and chat assistant that answers residents and files their request for them.",
+ pitch:"Most calls to a benefits agency are the same few questions: how do I apply, what do I send, where is my case. Our assistant answers them in plain language, in the caller's own language, and creates the request in the agency's system. Staff spend their day on the cases that need a person.",
+ m:[["145K","Calls a day at one of our largest agencies"],["<5 min","Wait time goal, down from about 4 hours"],["7","Languages in one state's voice intake"],[">85%","Goal for understanding callers the first time"]],
+ steps:["Answers residents by phone or chat, in their own language","Handles the common questions: how to apply, what to send, where's my case","Files the request in the agency's system and passes hard cases to staff"],
+ say:"Most calls are the same few questions. We answer those, so staff can work the cases.",
+ work:[["dhs","live","","Benefits voice intake in 7 languages"],["dss","pilot","","Contact center pilot"]],
+ fits:[["doh","Clinic, licensing and records questions"],["dol","Unemployment insurance claims"],["dmv","License and registration questions"],["rev","Tax filing and refund status"],["hcd","Housing program applications"],["aoc","Court date and filing questions"],["c311","City service requests"]],
+ note:"Why now: from October 2027, states with a Supplemental Nutrition Assistance Program (food assistance) payment error rate of 6% or more pay 5% to 15% of benefit costs.",
+ src:[["145K calls a day","Agency call volume","Partner Day prep call, Oct 27 (Amith Kumar). Repeated on Oct 30",C27],
+      ["Under 5 minutes, from about 4 hours","Goal","Partner Day prep call, Oct 27. The pilot proposal uses a different baseline: about 51 minutes plus menu time",C27],
+      ["7 languages","Engagement scope","Internal brief for Partner Day","https://docs.google.com/document/d/1tH_uo9CIiWFfem6ZE-Yz1w81lq5hMOgkf5F6pynfhBY/edit"],
+      ["Over 85% understanding","Pilot goal","City social services pilot proposal","https://docs.google.com/presentation/d/1w7qUVV358weMKDLvyXLvI1tArGC4DU6Ms5c8yy8fgdo/edit"],
+      ["6% threshold, 5% to 15% cost share","Federal law","Ballotpedia News, July 14, 2026","https://news.ballotpedia.org/2026/07/14/usda-releases-snap-error-rate-data-that-could-affect-state-cost-share/"]]},
+{id:"permitting",n:2,name:"Permitting AI",area:"Permitting and licensing",tag:"Government",big:"30 → 3",unit:"days to turn around a permit",
+ one:"Checks permit applications, routes them to the right reviewer and keeps a full record.",
+ pitch:"Permits pile up because every application has to be checked against long rulebooks, and only a few senior reviewers know them well. Our AI reads the documents, flags what's missing and sends the file to the right person. The reviewer still makes the call, just much faster.",
+ m:[["3 days","Permit turnaround, down from 30 days"],["2x","Permits handled by the same team"],["30 min","Engineering review, down from 3 hours"],["30%+","Fewer errors in submitted applications"]],
+ steps:["Reads each application and flags anything that's missing","Checks it against the rules and sends it to the right reviewer","Keeps the full history. The reviewer still makes every call"],
+ say:"Permitting is most of what government does. Everyone needs one, even for an event in a state park.",
+ work:[["dot","live","","Traffic permits across 7 districts"],["parks","pilot","","Special use permits"]],
+ fits:[["dep","Environmental permits"],["dob","Building and zoning permits"],["dmv","Specialty licenses"],["doh","Inspections and facility licenses"],["dpw","Right of way and utility permits"],["lic","Professional licenses"],["fm","Fire safety permits"]],
+ note:"One parks team had to chase 98% of its applications for missing details before this work started.",
+ src:[["3 days, 2x volume, 30 min review, 30%+ fewer errors","Reported result","Transportation permitting case study","https://docs.google.com/document/d/1tUhUVmc55pA3XkwznpAqrud-8orCpvR7miOmyXzPXvA/edit"],
+      ["98% of park applications needed follow-up","Starting baseline","State parks special use permit proposal","https://docs.google.com/presentation/d/1LFqGUyKKEDOk6wAn9vTpOW4P2RHMRp-1vfJshVWHuNA/edit"],
+      ["Permitting is most of what government does","Quote","Partner Day prep call, Oct 30 (Mal Marpaka)",C30]]},
+{id:"contracts",n:3,name:"Contracts Intelligence AI",area:"Contracts and procurement",tag:"Government",big:"3 days → 5 min",unit:"to review a contract",
+ one:"Reads contracts against the agency's own rules and suggests the redlines.",
+ pitch:"A careful review of a long contract can take two people two days. Our AI checks each clause against the agency's own standards, flags what's off and suggests the fix, with the source shown. Reviewers decide what to accept.",
+ m:[["5 min","Contract review, down from 3 days"],["3x","More contracts reviewed per person"],["70%+","Less manual review work"],["2 days","For two people to review a 30-page contract today"]],
+ steps:["Reads every clause against the agency's own standards","Flags what's off and suggests the fix, showing where it found it","Reviewers accept or reject. The AI does the reading"],
+ say:"Every department signs contracts. We take the reading off their plate and leave the decisions with them.",
+ work:[["comp","pilot","","Contract and procurement review"],["doit","pilot","","Pilot conversations"],[null,"pilot","A university contracts office","Demo and pilot conversations"]],
+ fits:[["das","Central procurement"],["dgs","Statewide contracts"],["oag","Legal review of agency contracts"],["dot","Construction and engineering contracts"],["doh","Provider and grant agreements"],["dpw","Vendor and maintenance contracts"],["pha","Housing vendor contracts"]],
+ note:"Review figures come from our contracts customer story. Government accounts here are pilots and active conversations.",
+ src:[["3 days to 5 minutes","Customer story","Anonymous contracts success story","https://docs.google.com/presentation/d/1Tg5HtyObyej9bCOQF64ESC2v1sCxHm7xSRb10ZOf3zw/edit"],
+      ["3x throughput","Product claim","Amazon Web Services capabilities deck (Keshav)",""],
+      ["70%+ less manual effort","Product claim","Contracts Intelligence government deck",""],
+      ["2 people, 2 days for 30 pages","Starting baseline","Legal workflow interview, May 15","https://docs.google.com/document/d/1u24pwM_FXjgJBGIoz4tx5mbdOS8wLwKChUBDzYHeaQU/edit"]]},
+{id:"ai-governance",n:4,name:"AI Governance Hub",area:"AI governance",tag:"Government",big:"1 screen",unit:"for every AI model, user and agent",
+ one:"One screen that shows who is using AI, what it costs and what it's allowed to do.",
+ pitch:"Every agency is using AI now, and most can't say who is using it, what it costs or what it can access. The Hub puts usage, spend, permissions and approvals in one place and records every action. Leaders get the audit trail they're asked for, and nobody gets a surprise bill.",
+ m:[["1","Screen for every AI model, user and agent"],["100%","Of connected AI spend traced to a user"],["Zero","AI changes go live without approval"],["4","Areas: change control, security, cost, access"]],
+ steps:["Connects to the AI tools an agency already runs","Shows usage, spend, permissions and approvals on one screen","Records every action, so there's a clean audit trail"],
+ say:"We built it after a surprise AI bill of our own. Every agency running AI has the same blind spot.",
+ work:[["comp","pilot","","Oversight of AI use and spend"],[null,"live","Our own AI operations","Keeps our monthly AI bill in check"]],
+ fits:[["doit","Statewide AI inventory and approvals"],["ciso","AI access and security controls"],["oig","Audit trail for AI decisions"],["aud","AI spend and compliance reviews"],["dbm","AI cost tracking by agency"],["doh","Oversight of clinical and data AI"],["dhs","Oversight of eligibility AI"]],
+ note:"Figures describe the controls the Hub applies to the AI tools connected to it.",
+ src:[["1 screen, 100% spend traced, zero unapproved changes, 4 areas","Product claim","AI Governance government deck and product brief","https://docs.google.com/presentation/d/11EQyOzO4fWZTyNIXBZZVIvg_ncIdKfUhIJLSMsKY-Ec/edit"],
+      ["Surprise AI bill story","Quote","Partner Day prep call, Oct 30 (Patrick Martin)",C30],
+      ["Lead with governance","Guidance","Elevator pitch session, Oct 29",C29]]},
+{id:"claims",n:5,name:"Claims AI",area:"Claims and case files",tag:"Commercial",big:"4 hrs → 10 min",unit:"of daily admin per analyst",
+ one:"Puts every claim record, note and document in one place that updates itself.",
+ pitch:"Claims analysts lose hours each day pulling notes, records and letters out of different systems. We put all of it in one place that refreshes every night, with plain-English search and a full audit trail. Analysts spend their mornings on decisions instead of data entry.",
+ m:[["10 min","Daily admin per analyst, down from 4 hours"],["3x","More claims each analyst can oversee"],["3 sec","To find a claim record, down from 15 minutes"],["100%","Of the claims team using it from launch"]],
+ steps:["Pulls claim records, notes and letters from every system","Refreshes every night and searches in plain English","Keeps a full audit trail, so analysts spend the day on decisions"],
+ say:"Any agency team juggling claims or case files across systems has this exact problem.",
+ work:[[null,"comm","A global food ingredients company","Workers' compensation claims"]],
+ fits:[["wcb","Injury claim files"],["dol","Unemployment insurance claims"],["risk","State liability and property claims"],["va","Veterans benefit claims"],["dhs","Disability benefit cases"],["das","State employee benefit claims"]],
+ note:"Commercial example. Results reported by the customer at launch.",
+ src:[["10 min, 3x, 3 sec, 100% adoption","Customer reported","Claims customer intake, May 12","https://docs.google.com/document/d/1TiKfncoGLu-Rpp4ZhRudzZv988fVWbBTBZ19no9w7rA/edit"]]},
+{id:"website-concierge",n:6,name:"Website Concierge AI",area:"Resident self-service",tag:"Commercial",big:"$6 → 2¢",unit:"cost of each conversation",
+ one:"Answers website visitors in seconds and takes them straight to the right form or service.",
+ pitch:"Most people come to a government website with one question and leave without an answer. Our concierge answers in plain language within seconds, then opens the exact page, form or service they need. Live agents get fewer repeat questions and more time for the hard ones.",
+ m:[["3 sec","To answer, vs. up to 15-minute waits at peak"],["2 cents","Per conversation, down from about $6"],["50K+","Conversations a month"],["1 in 3","Questions handled by the AI"]],
+ steps:["Answers website visitors in plain language within seconds","Opens the exact page, form or service they need","Leaves live agents free for the hard questions"],
+ say:"Built in 8 weeks. We're prototyping the same idea as a trip planner for a state parks system.",
+ work:[[null,"comm","A national roadside and travel club","Member website concierge"],["parks","pilot","","Trip planner prototype"]],
+ fits:[["dmv","Renewals, appointments and forms"],["c311","City service questions"],["rev","Filing help and refund status"],["dol","Unemployment and job seeker questions"],["dhs","Benefit eligibility questions"],["tour","Visitor and trip planning"]],
+ note:"Commercial example. Results reported by the customer. Cost per conversation is their estimate.",
+ src:[["3 sec, 2 cents, 50K+ a month, 1 in 3, built in 8 weeks","Customer reported","Travel club customer intake","https://docs.google.com/document/d/1Um1KduR3QpB5kXmXulYxB3fMm6kMhyY-8IVtK0kuYTI/edit"],
+      ["State parks trip planner","Prototype","Trip planner prototype brief","https://docs.google.com/document/d/1oK7v4p0-I8KrXBNTv1M-EUTWs1D6vfGicSa5mKLw28Q/edit"]]},
+{id:"document-intelligence",n:7,name:"Document Intelligence AI",area:"Records and research",tag:"Commercial",big:"30 → 3",unit:"minutes per research search",
+ one:"Searches huge document collections and explains why each result fits.",
+ pitch:"Finding the right document in a big archive usually depends on the one person who has read most of it. Our AI searches the full text, ranks what it finds and explains why each result fits. Staff get an answer in minutes, with the source right there to check.",
+ m:[["56K+","Books searchable in full text"],["3 min","Per search, down from about 30 minutes"],["~90%","Less time on each research request"],["15+","Editors using it every day"]],
+ steps:["Searches the full text and the catalog together","Ranks what it finds and explains why each result fits","Shows the source, so staff can check every answer"],
+ say:"Any agency sitting on decades of documents gets answers in minutes, with the source right there.",
+ work:[[null,"comm","A major book publisher","Catalog research for editors"]],
+ fits:[["arch","Public records requests"],["lib","Collection research"],["leg","Bill and statute research"],["aoc","Case file search"],["edu","Policy and curriculum search"],["doh","Policy and guidance manuals"]],
+ note:"Commercial example. Results reported by the customer. The 30-minute starting point is their estimate.",
+ src:[["56K+, 3 min, ~90%, 15+ editors","Customer reported","Publisher customer intake, Apr 14","https://docs.google.com/document/d/1t64W8h6_QNt7yfVaFxYMTH3Ie6GcZ0-1OQmSqtS9Mrs/edit"]]},
+{id:"quality-inspection",n:8,name:"AI Quality Inspection",area:"Defense and inspection",tag:"Defense",big:"~10",unit:"critical defect types checked on each round",
+ one:"Computer vision that checks X-ray images for critical defects and flags them for a person.",
+ pitch:"Reading X-rays for defects takes trained specialists who are hard to hire and slow to train. Our AI checks every image for the defects that matter most and flags anything that needs a human look. Inspectors spend their time on the items that need them.",
+ m:[["~10","Critical defect types checked on each round"],["6 months","To train one human X-ray reader"],["$20K","To train each reader before they work alone"],["100%","Goal for catching critical defects"]],
+ steps:["Reads the X-ray image of every round","Flags critical defects for a human inspector to check","Keeps a record of every inspection"],
+ say:"It opens doors outside defense too. Our team used it to start a quality talk with a major automaker.",
+ work:[[null,"live","A munitions maker supplying the U.S. Army","X-ray inspection of 40mm rounds"]],
+ fits:[["dod","Depots and arsenals"],["dot","Bridge and structure inspection"],["dpw","Water main and pipe inspection"],["puc","Utility asset inspection"],["ag","Food safety inspection"]],
+ note:"Training figures are the customer's own baseline. Accuracy is the project goal.",
+ src:[["~10 defect types, 6 months and $20K to train, 100% goal","Customer baseline and goal","Inspection customer meeting notes","https://docs.google.com/document/d/1-5TzG8KzdDXFWStAtoaeTB7b5x8lmY3VYZzTRdSe18Q/edit"],
+      ["Inspection case study","Case study","Inspection case study","https://docs.google.com/document/d/13lwQWEuXtXrO7TIJ-BKIkxTJbGbv-2UE-ZTfRYJPCVM/edit"],
+      ["Opened an automaker conversation","Anecdote","Partner Day prep call, Oct 30 (Nick Engels)",C30]]}
+];
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hue=s=>`background:var(--h${s.n});color:var(--H${s.n})`;
+const BADGE={live:'',pilot:'<span class="badge">Pilot</span>',comm:'<span class="badge comm">Commercial</span>'};
+
+/* use cases */
+document.getElementById("uses").innerHTML=S.map(s=>`
+ <article class="use" id="use-${s.id}" aria-labelledby="nm-${s.id}">
+  <div class="tint" style="${hue(s)}">
+    <span class="tag">${esc(s.area)} · ${esc(s.tag)}</span>
+    <span class="nm" id="nm-${s.id}">${esc(s.name)}</span>
+    <span class="big">${esc(s.big)}</span><span class="unit">${esc(s.unit)}</span>
+    <span class="gap"></span>
+    <button class="open" type="button" data-id="${s.id}">See numbers and sources →</button>
+  </div>
+  <div class="pitch"><div class="ul">The pitch</div><p>${esc(s.pitch)}</p></div>
+  <div class="where">
+    <div><div class="ul">Where we use it today</div>
+      <div class="dp now">${s.work.map(([d,st,label])=>`<span class="${st==="comm"?"comm":""}">${esc(d?D[d][0]:label)}${st==="pilot"?"<em>Pilot</em>":st==="comm"?"<em>Commercial</em>":""}</span>`).join("")}</div></div>
+    <div><div class="ul">Where else it can be used</div>
+      <div class="dp">${s.fits.map(([d])=>`<span>${esc(D[d][0])}</span>`).join("")}</div></div>
+  </div>
+ </article>`).join("");
+
+/* department finder */
+const byDept={};
+S.forEach(s=>{
+  s.work.forEach(([d,st,,note])=>{if(d&&st!=="comm")(byDept[d]=byDept[d]||[]).push({s,st,note});});
+  s.fits.forEach(([d,note])=>{const a=byDept[d]=byDept[d]||[];if(!a.some(x=>x.s===s))a.push({s,st:"fit",note});});
+});
+const fams=document.getElementById("families");
+fams.innerHTML=FAM.map(([k,label])=>{
+  const ids=Object.keys(D).filter(id=>D[id][1]===k&&byDept[id]);
+  return `<div class="fam"><h3>${esc(label)}</h3><div class="chips">${ids.map(id=>`<button type="button" class="chip" data-d="${id}" aria-pressed="false">${esc(D[id][0])}</button>`).join("")}</div></div>`;
+}).join("");
+const ans=document.getElementById("answer");
+const short=s=>s.name.replace(/ AI$/,"");
+function row(h){
+  return `<button type="button" class="row" data-id="${h.s.id}">
+    <span class="sw" style="${hue(h.s)}">0${h.s.n}</span>
+    <span><span class="nm">${esc(h.s.name)}</span>${h.st==="pilot"?BADGE.pilot:""}<br><span class="why">${esc(h.note)}</span></span>
+    <span class="go" aria-hidden="true">→</span></button>`;
+}
+function pick(id){
+  fams.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.d===id?"true":"false"));
+  const hits=byDept[id]||[], lead=hits.filter(h=>h.st!=="fit"), fit=hits.filter(h=>h.st==="fit");
+  ans.innerHTML=`<div><div class="q">If you're talking to the</div><h3>${esc(D[id][0])}</h3></div>`+
+   (lead.length?`<div class="grp"><div class="gl"><i></i>Lead with this. We already work with this department.</div>${lead.map(row).join("")}</div>`:"")+
+   (fit.length?`<div class="grp"><div class="gl"><i class="o"></i>${lead.length?"Also bring up":"Strong fits to bring up"}</div>${fit.map(row).join("")}</div>`:"");
+  try{localStorage.setItem("psc-dept",id)}catch(e){}
+}
+fams.addEventListener("click",e=>{const c=e.target.closest(".chip");if(c)pick(c.dataset.d);});
+let first="dot";try{const v=localStorage.getItem("psc-dept");if(v&&byDept[v])first=v}catch(e){}
+pick(first);
+
+/* detail sheet */
+const dlg=document.getElementById("sheet");
+function sheet(s){
+  const i=S.indexOf(s), prev=S[(i+S.length-1)%S.length], next=S[(i+1)%S.length];
+  const workItems=s.work.map(([d,st,label,note])=>`<li><b>${esc(d?D[d][0]:label)}${BADGE[st]}</b><small>${esc(note)}</small></li>`).join("");
+  dlg.innerHTML=`<div class="sheet">
+   <div class="sh-top" style="${hue(s)}">
+     <div><span class="tag">${esc(s.area)} · ${esc(s.tag)}</span><h2 id="sh-title" style="color:inherit">${esc(s.name)}</h2><p>${esc(s.one)}</p></div>
+     <button class="x" type="button" data-close aria-label="Close">×</button>
+   </div>
+   <div class="sh-body">
+     <div class="blk"><h3>The numbers</h3>
+       <div class="stats">${s.m.map(([v,d])=>`<div class="stat"><div class="v" style="color:var(--H${s.n})">${esc(v)}</div><div class="d">${esc(d)}</div></div>`).join("")}</div></div>
+     <div class="blk"><h3>How it works</h3>
+       <div class="flow">${s.steps.map((t,k)=>`<div class="step"><span class="n" style="${hue(s)}">${k+1}</span><p>${esc(t)}</p></div>`).join("")}</div></div>
+     <div class="quote" style="background:var(--h${s.n})"><small style="color:var(--H${s.n})">Say it like this</small>${esc(s.say)}</div>
+     <div class="blk"><h3>Departments</h3>
+       <div class="depts">
+         <div class="dbox"><h4><i></i>Where we use it today</h4><ul class="dl">${workItems}</ul></div>
+         <div class="dbox"><h4><i class="o"></i>Where else it can be used</h4><ul class="dl fit">${s.fits.map(([d,n])=>`<li><b>${esc(D[d][0])}</b><small>${esc(n)}</small></li>`).join("")}</ul></div>
+       </div>
+       <p class="note">${esc(s.note)}</p></div>
+     <details class="src"><summary>Where these numbers come from</summary>
+       <ul class="srcs">${s.src.map(([st,k,f,u])=>`<li><span class="s">${esc(st)}</span><span class="k">${esc(k)}</span><span class="f">${esc(f)}${u?` · <a href="${u}" target="_blank" rel="noopener">Open source</a>`:" · Internal file, no link"}</span></li>`).join("")}</ul></details>
+   </div>
+   <div class="sh-nav"><button type="button" data-go="${prev.id}">← ${esc(short(prev))}</button><button type="button" data-go="${next.id}">${esc(short(next))} →</button></div>
+  </div>`;
+  if(!dlg.open)dlg.showModal();
+  dlg.scrollTop=0;
+}
+function route(){
+  const s=S.find(x=>x.id===location.hash.slice(1));
+  if(s)sheet(s);else if(dlg.open)dlg.close();
+}
+function open(id){if(location.hash.slice(1)===id)route();else location.hash=id;}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-id],[data-go],[data-close]");if(!t)return;
+  if(t.dataset.close!==undefined){dlg.close();return;}
+  open(t.dataset.id||t.dataset.go);
+});
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();});
+dlg.addEventListener("close",()=>{if(location.hash)location.hash="";});
+window.addEventListener("hashchange",route);
+route();
+</script>
+
+</body>
+</html>
